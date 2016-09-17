@@ -4,8 +4,8 @@
 .build
 .idea
 .metadata
-.gradle
 .out
+.gradle/
 
 *.class
 *.DS_Store
@@ -14,7 +14,6 @@
 *.eml
 *.iml
 *.log
-*.gradle
 *classes
 
 target
@@ -27,4 +26,3 @@ gradle
 /gradle
 bin
 rebel.xml
-gradlew
