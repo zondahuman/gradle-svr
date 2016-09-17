@@ -1,0 +1,3 @@
+rootProject.name = 'gradle-svr'
+include 'gradle-model'
+include 'gradle-common'

@@ -1,0 +1,63 @@
+group 'com.abin.lee'
+version '0.0.1-SNAPSHOT'
+def artifactId = "gradle-svr"
+//apply plugin: 'signing' //使用signing plugin做数字签名
+
+apply plugin: 'war'
+apply plugin: 'java'
+apply plugin: 'maven'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+//参见Part 2， 为项目生成**.jar/**-javadoc.jar/**-sources.jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+//打包源代码
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+//如果希望gradle install，安装到.m2本地仓库，参考下面的内容
+install {
+    repositories.mavenInstaller {
+        pom.version = "$project.version"
+        pom.artifactId = "$artifactId"
+        pom.groupId = "$project.group"
+    }
+}
+
+//为所有的jar包做数字签名
+//signing {
+//    sign configurations.archives
+//}
+
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo1.maven.org/maven2' }
+    //    使用开源中国的maven仓库
+    maven { url 'http://maven.oschina.net/content/groups/public/' }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    //导入本地的依赖包
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //从maven仓库导入依赖
+    compile ('org.apache.httpcomponents:httpclient:4.4')
+    compile ('org.apache.commons:commons-lang3:3.3.2')
+
+}
